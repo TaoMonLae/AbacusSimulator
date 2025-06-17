@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Multi Abacus Selector</title>
   <style>
     body {
@@ -13,12 +14,12 @@
       color: #2d2d2d;
       transition: background 0.3s ease, color 0.3s ease;
     }
-  
+
     .dark-mode {
       background: linear-gradient(to bottom right, #1a1a1a, #2a2a2a);
       color: #f0f0f0;
     }
-  
+
     .abacus {
       display: flex;
       justify-content: center;
@@ -26,7 +27,7 @@
       margin: 20px auto;
       flex-wrap: wrap;
     }
-  
+
     .rod {
       display: flex;
       flex-direction: column;
@@ -34,7 +35,7 @@
       padding: 5px;
       position: relative;
     }
-  
+
     .bar {
       width: 100%;
       height: 4px;
@@ -42,14 +43,14 @@
       margin: 10px 0;
       border-radius: 2px;
     }
-  
+
     .heaven-beads,
     .earth-beads {
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
-  
+
     .bead {
       width: 38px;
       height: 26px;
@@ -61,32 +62,32 @@
       touch-action: manipulation;
       position: relative;
     }
-  
+
     .bead:hover {
       transform: translateY(-2px) scale(1.1);
       background: radial-gradient(circle at 30% 30%, #d8e4f4, #6d88bb);
     }
-  
+
     .bead.active {
       background: radial-gradient(circle at 30% 30%, #93f9b9, #3ac586);
       transform: scale(1.08);
       animation: bounce 0.25s ease-in-out;
     }
-  
+
     @keyframes bounce {
       0% {
         transform: scale(1);
       }
-  
+
       50% {
         transform: scale(1.12);
       }
-  
+
       100% {
         transform: scale(1.08);
       }
     }
-  
+
     select,
     button {
       margin: 5px;
@@ -99,19 +100,19 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
     }
-  
+
     select:hover,
     button:hover {
       background: #416fd3;
       transform: scale(1.05);
     }
-  
+
     .label {
       font-size: 13px;
       margin-bottom: 6px;
       color: #444;
     }
-  
+
     .instruction-text {
       margin-top: 12px;
       font-size: 15px;
@@ -123,7 +124,7 @@
       border-radius: 6px;
       color: #333;
     }
-  
+
     .confetti {
       position: fixed;
       top: 0;
@@ -134,132 +135,208 @@
       z-index: 9999;
       animation: fadeout 3s ease forwards;
     }
-  
+
     @keyframes fadeout {
       to {
         opacity: 0;
       }
     }
-  
+
     @media (max-width: 600px) {
       .abacus {
         flex-direction: column;
         align-items: center;
       }
-  
+
       .bead {
         width: 32px;
         height: 22px;
       }
-  
+
       select,
       button {
         width: 90%;
         font-size: 14px;
       }
     }
-  
-    </style>   
+   .mascot {
+    position: fixed;
+    bottom: 16px;
+    left: 20px;
+    background: #fff3c1;
+    padding: 10px 18px;
+    border-radius: 14px;
+    font-size: 16px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    z-index: 999;
+    animation: fadeMascot 0.3s ease-in-out;
+  }
+
+  @keyframes fadeMascot {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  </style>
 </head>
+
 <body>
 
-<h2>🧮 Interactive Multi-Type Abacus</h2>
-<label for="abacusType">Choose Abacus Type:</label>
-<select id="abacusType" onchange="showInstructions()">
-  <option value="soroban">Japanese Soroban (1:4)</option>
-  <option value="suanpan">Chinese Suanpan (2:5)</option>
-  <option value="schoty">Russian Schoty (10 beads/row)</option>
-</select>
-<button onclick="buildAbacus()">Build</button>
-<button onclick="toggleDarkMode()">🌓 Toggle Theme</button>
+  <h2>🧮 Interactive Multi-Type Abacus</h2>
+  <label for="abacusType">Choose Abacus Type:</label>
+  <select id="abacusType" onchange="showInstructions()">
+    <option value="soroban">Japanese Soroban (1:4)</option>
+    <option value="suanpan">Chinese Suanpan (2:5)</option>
+    <option value="schoty">Russian Schoty (10 beads/row)</option>
+  </select>
+  <button onclick="buildAbacus()">Build</button>
+  <button onclick="toggleDarkMode()">🌓 Toggle Theme</button>
+  <div id="mascot" class="mascot">👋 Hi! I'm Tao! Let's play abacus!</div>
 
-<div class="instruction-text" id="instructionText">Select an abacus type to view instructions.</div>
-<div class="abacus" id="abacus"></div>
-<h3>Value: <span id="value">0</span></h3>
-<button onclick="saveAbacus()">💾 Save</button>
-<button onclick="loadAbacus()">📥 Load</button>
-<button onclick="clearAbacus()">🧹 Clear All</button>
+  <div class="instruction-text" id="instructionText">Select an abacus type to view instructions.</div>
+  <div class="abacus" id="abacus"></div>
+  <h3>Value: <span id="value">0</span></h3>
+  <button onclick="saveAbacus()">💾 Save</button>
+  <button onclick="loadAbacus()">📥 Load</button>
+  <button onclick="clearAbacus()">🧹 Clear All</button>
+  <button onclick="undo()">↩️ Undo</button>
+  <button onclick="redo()">↪️ Redo</button>
 
-<div class="challenge">
-  <h4>🎯 Challenge Mode</h4>
-  <button onclick="generateChallenge(3)">Easy (1–999)</button>
-  <button onclick="generateChallenge(5)">Medium (1–99999)</button>
-  <button onclick="generateChallenge(8)">Hard (1–99999999)</button>
-  <p>Target: <span id="target">—</span></p>
-  <button onclick="checkAnswer()">Check Answer</button>
-<button onclick="showStepByStep()">Help Me</button>
-<button id="showAnswerBtn" onclick="showAnswer()" style="display:none;">Show Answer</button>
-</div>
+  <div class="challenge">
+    <h4>🎯 Challenge Mode</h4>
+    <button onclick="generateChallenge(3)">Easy (1–999)</button>
+    <button onclick="generateChallenge(5)">Medium (1–99999)</button>
+    <button onclick="generateChallenge(8)">Hard (1–99999999)</button>
+    <p>Target: <span id="target">—</span></p>
+    <button onclick="checkAnswer()">Check Answer</button>
+    <button onclick="showStepByStep()">Help Me</button>
+    <button id="showAnswerBtn" onclick="showAnswer()" style="display:none;">Show Answer</button>
+  </div>
 
-<script>
-  // script.js (realistic abacus behavior: allow multiple bead selection in order)
+  <script>
+    // script.js (realistic abacus behavior: allow multiple bead selection in order)
+
+    // script.js (with realistic behavior + Undo/Redo support)
 
     const abacus = document.getElementById('abacus');
-    const valueDisplay = document.getElementById('value');
-    const targetDisplay = document.getElementById('target');
-    const instructionText = document.getElementById('instructionText');
-    const rods = 10;
-    let currentTarget = null;
-    let attempts = 0;
-    let challengeStart = null;
-    const audioCorrect = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
-    const audioWrong = new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg');
+      const valueDisplay = document.getElementById('value');
+      const targetDisplay = document.getElementById('target');
+      const instructionText = document.getElementById('instructionText');
+      const rods = 10;
+      let currentTarget = null;
+      let attempts = 0;
+      let challengeStart = null;
+      const audioCorrect = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
+      const audioWrong = new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg');
+      const audioClick = new Audio('https://actions.google.com/sounds/v1/cartoon/pop.ogg');
 
-    function updateValue() {
-      let total = 0;
+      let undoStack = [];
+      let redoStack = [];
+
+    function saveHistory() {
+      const beads = document.querySelectorAll('.rod');
+      const snapshot = Array.from(beads).map(rod =>
+        Array.from(rod.querySelectorAll('.bead')).map(b => b.classList.contains('active') ? 1 : 0)
+      );
+      undoStack.push(snapshot);
+      if (undoStack.length > 50) undoStack.shift();
+      redoStack = [];
+    }
+
+    function restoreState(state) {
       const rodsEl = document.querySelectorAll('.rod');
-      rodsEl.forEach((rod, index) => {
-        const place = Math.pow(10, rods - index - 1);
-        let value = 0;
-        const type = rod.dataset.type;
-
-        if (type === 'soroban') {
-          value += rod.querySelector('.heaven-beads .bead.active') ? 5 : 0;
-          value += rod.querySelectorAll('.earth-beads .bead.active').length;
-        } else if (type === 'suanpan') {
-          value += rod.querySelectorAll('.heaven-beads .bead.active').length * 5;
-          value += rod.querySelectorAll('.earth-beads .bead.active').length;
-        } else if (type === 'schoty') {
-          value += rod.querySelectorAll('.bead.active').length;
-        }
-
-        total += value * place;
-      });
-      valueDisplay.textContent = total;
-      return total;
-    }
-
-    function createBead() {
-      const bead = document.createElement('div');
-      bead.className = 'bead';
-      bead.onclick = () => toggleBead(bead);
-      return bead;
-    }
-
-    function toggleBead(bead) {
-      const group = bead.parentElement;
-      const siblings = Array.from(group.children);
-      const index = siblings.indexOf(bead);
-
-      // Heaven beads: only one can be active at a time
-      if (group.classList.contains('heaven-beads')) {
-        siblings.forEach(b => b.classList.remove('active'));
-        bead.classList.add('active');
-      }
-      // Earth beads or Schoty: simulate realistic behavior (beads pushed in order)
-      else {
-        const activate = !bead.classList.contains('active');
-        siblings.forEach((b, i) => {
-          if (i <= index) {
-            b.classList.toggle('active', activate);
-          } else {
-            b.classList.remove('active');
-          }
+      rodsEl.forEach((rod, i) => {
+        const beads = rod.querySelectorAll('.bead');
+        beads.forEach((b, j) => {
+          b.classList.toggle('active', state[i][j] === 1);
         });
-      }
-
+      });
       updateValue();
     }
+
+    function undo() {
+      if (undoStack.length === 0) return;
+      const current = Array.from(document.querySelectorAll('.rod')).map(rod =>
+        Array.from(rod.querySelectorAll('.bead')).map(b => b.classList.contains('active') ? 1 : 0)
+      );
+      redoStack.push(current);
+      const previous = undoStack.pop();
+      restoreState(previous);
+    }
+
+    function redo() {
+      if (redoStack.length === 0) return;
+      const current = Array.from(document.querySelectorAll('.rod')).map(rod =>
+        Array.from(rod.querySelectorAll('.bead')).map(b => b.classList.contains('active') ? 1 : 0)
+      );
+      undoStack.push(current);
+      const next = redoStack.pop();
+      restoreState(next);
+    }
+
+    function updateValue() {
+        let total = 0;
+        const rodsEl = document.querySelectorAll('.rod');
+        rodsEl.forEach((rod, index) => {
+          const place = Math.pow(10, rods - index - 1);
+          let value = 0;
+          const type = rod.dataset.type;
+
+          if (type === 'soroban') {
+            value += rod.querySelector('.heaven-beads .bead.active') ? 5 : 0;
+            value += rod.querySelectorAll('.earth-beads .bead.active').length;
+          } else if (type === 'suanpan') {
+            value += rod.querySelectorAll('.heaven-beads .bead.active').length * 5;
+            value += rod.querySelectorAll('.earth-beads .bead.active').length;
+          } else if (type === 'schoty') {
+            value += rod.querySelectorAll('.bead.active').length;
+          }
+
+          total += value * place;
+        });
+        valueDisplay.textContent = total;
+        return total;
+      }
+
+      function createBead() {
+        const bead = document.createElement('div');
+        bead.className = 'bead';
+        bead.onclick = () => {
+          audioClick.currentTime = 0;
+          audioClick.play();
+          saveHistory();
+          toggleBead(bead);
+        };
+        return bead;
+      }
+
+      function toggleBead(bead) {
+        const group = bead.parentElement;
+        const siblings = Array.from(group.children);
+        const index = siblings.indexOf(bead);
+        const rod = bead.closest('.rod');
+        const type = rod?.dataset.type;
+
+        if (group.classList.contains('heaven-beads')) {
+          if (type === 'soroban') {
+            const isActive = bead.classList.contains('active');
+            siblings.forEach(b => b.classList.remove('active'));
+            if (!isActive) bead.classList.add('active');
+          } else {
+            bead.classList.toggle('active'); // allow multiple in suanpan
+          }
+        } else {
+          const activate = !bead.classList.contains('active');
+          siblings.forEach((b, i) => {
+            if (i <= index) {
+              b.classList.toggle('active', activate);
+            } else {
+              b.classList.remove('active');
+            }
+          });
+        }
+
+        updateValue();
+      }
 
     function buildAbacus() {
       abacus.innerHTML = '';
@@ -324,18 +401,12 @@
       const saved = localStorage.getItem('abacusState');
       if (!saved) return alert('⚠️ No saved state found.');
       const state = JSON.parse(saved);
-      const rodsEl = document.querySelectorAll('.rod');
-      rodsEl.forEach((rod, i) => {
-        const beads = rod.querySelectorAll('.bead');
-        beads.forEach((b, j) => {
-          b.classList.toggle('active', state[i][j] === 1);
-        });
-      });
-      updateValue();
+      restoreState(state);
       alert('📥 Abacus state loaded!');
     }
 
     function clearAbacus() {
+      saveHistory();
       const beads = document.querySelectorAll('.bead');
       beads.forEach(b => b.classList.remove('active'));
       localStorage.removeItem('abacusState');
@@ -434,4 +505,4 @@
       }
     });
 
-</script>
+  </script>
