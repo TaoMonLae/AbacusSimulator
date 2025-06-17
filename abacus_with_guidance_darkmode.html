@@ -142,36 +142,69 @@
     }
   
     @media (max-width: 600px) {
-      .abacus {
-        flex-direction: column;
-        align-items: center;
-      }
-  
-      .bead {
-        width: 32px;
-        height: 22px;
-      }
-  
-      select,
-      button {
-        width: 90%;
-        font-size: 14px;
-      }
-    }
-  
+  body {
+    margin-top: 10px;
+    padding-inline: 10px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  select,
+  button {
+    width: 100%;
+    font-size: 14px;
+    margin: 6px 0;
+  }
+
+  .abacus {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bead {
+    width: 30px;
+    height: 20px;
+  }
+
+  .bar {
+    height: 3px;
+    width: 100%;
+  }
+
+  .instruction-text {
+    font-size: 14px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  .challenge {
+    text-align: left;
+    font-size: 14px;
+    margin-top: 20px;
+  }
+
+  h3, h4, .label {
+    font-size: 15px;
+  }
+}
+
     </style>   
 </head>
 <body>
 
 <h2>🧮 Interactive Multi-Type Abacus</h2>
-<label for="abacusType">Choose Abacus Type:</label>
-<select id="abacusType" onchange="showInstructions()">
-  <option value="soroban">Japanese Soroban (1:4)</option>
-  <option value="suanpan">Chinese Suanpan (2:5)</option>
-  <option value="schoty">Russian Schoty (10 beads/row)</option>
-</select>
-<button onclick="buildAbacus()">Build</button>
-<button onclick="toggleDarkMode()">🌓 Toggle Theme</button>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+  <select id="abacusType" onchange="showInstructions()">
+    <option value="soroban">Japanese Soroban (1:4)</option>
+    <option value="suanpan">Chinese Suanpan (2:5)</option>
+    <option value="schoty">Russian Schoty (10 beads/row)</option>
+  </select>
+  <button onclick="buildAbacus()">Build</button>
+  <button onclick="toggleDarkMode()">🌓 Toggle Theme</button>
+</div>
 
 <div class="instruction-text" id="instructionText">Select an abacus type to view instructions.</div>
 <div class="abacus" id="abacus"></div>
